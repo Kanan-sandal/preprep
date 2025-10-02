@@ -1,0 +1,45 @@
+Optimal Approach (Prefix Sum + Hash Map)
+Idea:
+Let prefixSum[i] = sum of first i elements.
+For subarray nums[j..i], sum = prefixSum[i] - prefixSum[j-1]
+We need prefixSum[i] - k to exist in map → increment count
+
+
+Steps:
+Initialize unordered_map<int,int> mp → mp[0]=1
+Initialize sum = 0, count = 0
+Iterate i from 0 to n-1:
+sum += nums[i]
+If sum - k in mp → count += mp[sum - k]
+mp[sum]++
+
+
+code:
+class Solution{
+public:
+    int subarraySum(vector<int>&nums,int k){
+        unordered_map<int,int> mp;
+        mp[0]=1;
+        int sum=0,count=0;
+        for(int num:nums){
+            sum+=num;
+            if(mp.find(sum-k)!=mp.end()){
+                count+=mp[sum-k];
+            }
+            mp[sum]++;
+        }
+        return count;
+    }
+};
+
+Dry Run
+nums = [1,1,1], k = 2
+mp={0:1}, sum=0, count=0
+
+i=0: sum=1 → sum-k=-1 → not in map → mp[1]=1
+i=1: sum=2 → sum-k=0 → 0 in map → count=1 → mp[2]=1
+i=2: sum=3 → sum-k=1 → 1 in map → count+=1 → count=2
+
+Complexity
+Time: O(n) → one pass
+Space: O(n) → hashmap of prefix sums
