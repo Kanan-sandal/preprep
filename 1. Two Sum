@@ -1,3 +1,18 @@
+Optimal Approach (Hashing)
+Idea:
+Use a hash map to store numbers and their indices.
+While iterating, check if target - nums[i] exists in the map.
+If yes, return [map[target-nums[i]], i].
+
+
+Steps:
+Initialize unordered_map<int,int> mp.
+Iterate i from 0 to n-1:
+complement = target - nums[i]
+If complement in map → return [mp[complement], i]
+Else → store nums[i] in map: mp[nums[i]] = i
+
+code:
 class Solution{
 public:
     vector<int> twoSum(vector<int>& nums,int target){
