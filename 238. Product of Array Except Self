@@ -1,0 +1,58 @@
+Optimal Approach (Prefix & Suffix Products)
+Idea:
+Compute left[i] = product of elements before i
+Compute right[i] = product of elements after i
+answer[i] = left[i] * right[i]
+Can optimize to O(1) space using answer array for left products
+
+
+Steps:
+Initialize answer array with left products:
+answer[i] = product of nums[0..i-1]
+Use a R=1 variable for right product:
+Iterate from n-1 to 0:
+answer[i] *= R
+R *= nums[i]
+
+
+code:
+class Solution{
+public:
+    vector<int> productExceptSelf(vector<int>& nums){
+        int n=nums.size();
+        vector<int> ans(n,1);
+        for(int i=1;i<n;i++){
+            ans[i]=ans[i-1]*nums[i-1];
+        }
+        int r=1;
+        for(int i=n-1;i>=0;i--){
+            ans[i]*=r;
+            r*=nums[i];
+        }
+        return ans;
+    }
+};
+
+Dry Run
+nums = [1,2,3,4], n=4
+answer=[1,1,1,1]
+
+Left pass:
+i=1 → answer[1]=1*1=1
+i=2 → answer[2]=1*2=2
+i=3 → answer[3]=2*3=6
+answer=[1,1,2,6]
+
+Right pass:
+R=1
+i=3 → answer[3]*=1 →6, R*=4 →R=4
+i=2 → answer[2]*=4 →8, R*=3 →R=12
+i=1 → answer[1]*=12 →12, R*=2 →R=24
+i=0 → answer[0]*=24 →24, R*=1 →R=24
+
+Final answer=[24,12,8,6]
+
+
+Complexity
+Time: O(n) → two passes
+Space: O(1) → ignoring output array
