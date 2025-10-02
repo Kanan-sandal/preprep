@@ -1,0 +1,42 @@
+Optimal Approach (Sliding Window + Hash Set)
+Idea:
+Keep a sliding window of size k using a set.
+If duplicate exists in the current window → return true.
+
+
+Steps:
+Initialize unordered_set<int> window
+Iterate i from 0 to n-1:
+If nums[i] in window → return true
+Insert nums[i] into window
+If i >= k → remove nums[i-k] to maintain window size ≤ k
+Return false
+
+
+
+code:
+class Solution{
+public:
+    bool containsDuplicate(vector<int>& nums){
+        unordered_set<int> seen;
+        for(int num:nums){
+            if(seen.count(num)) return true;
+            seen.insert(num);
+        }
+        return false;
+    }
+};
+
+
+Dry Run
+nums=[1,2,3,1], k=3
+window={}
+i=0: 1 not in window → insert → window={1}
+i=1: 2 not in window → insert → window={1,2}
+i=2: 3 not in window → insert → window={1,2,3}
+i=3: 1 in window → return true
+
+
+Complexity
+Time: O(n) → single pass
+Space: O(min(n,k)) → set of max size k
