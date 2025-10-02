@@ -1,0 +1,51 @@
+Optimal Approach (Sort + Merge)
+Idea:
+Sort intervals by start time
+Iterate and merge overlapping intervals
+
+
+Steps:
+Sort intervals by start
+Initialize merged with first interval
+For each interval [start,end]:
+If merged.back()[1] >= start → overlap → merge: merged.back()[1] = max(merged.back()[1], end)
+Else → no overlap → push interval
+
+
+code:
+class Solution{
+public:
+    vector<vector<int>> merge(vector<vector<int>> intervals){
+        if(intervals.empty()) return{};
+        sort(intervals.begin(),intervals.end());
+        vector<vector<int>> merged;
+        merged.push_back(intervals[0]);
+
+        for(int i=1;i<intervals.size();i++){
+            if(merged.back()[1]>=intervals[i][0]){
+                merged.back()[1]=max(merged.back()[1],intervals[i][1]);
+            }else{
+                merged.push_back(intervals[i]);
+            }
+        }
+        return merged;
+    }
+};
+
+
+
+Dry Run
+intervals = [[1,3],[2,6],[8,10],[15,18]]
+sort → [[1,3],[2,6],[8,10],[15,18]]
+merged=[[1,3]]
+
+i=1: [2,6] → 3>=2 → merge → [1,6]
+i=2: [8,10] → 6<8 → push → merged=[[1,6],[8,10]]
+i=3: [15,18] → 10<15 → push → merged=[[1,6],[8,10],[15,18]]
+✅ Output: [[1,6],[8,10],[15,18]]
+
+
+
+Complexity
+Time: O(n log n) → sorting
+Space: O(n) → output array
