@@ -37,3 +37,49 @@ Max length = 3
 Complexity
 Time: O(n)
 Space: O(1) (fixed 256 array for ASCII)
+
+
+
+Approach: Sliding Window + Hashmap
+Use two pointers:
+left → start of current window
+right → end of current window (expands as we iterate).
+Use a hashmap (unordered_map<char,int>) to store the last seen index of each character.
+At each step:
+If s[right] was seen and lastSeen[s[right]] >= left,
+→ move left = lastSeen[s[right]] + 1 (skip duplicate).
+Update lastSeen[s[right]] = right.
+Update maxLen = max(maxLen, right - left + 1).
+
+
+
+code:
+class Solution{
+public:
+    int lengthOfLongestSubstring(string s){
+        unordered_map<char,int> lastseen;
+        int left=0,maxlen=0;
+        for(int right=0;right<s.size();right++){
+            char c=s[right];
+            if(lastseen.find(c)!=lastseen.end() && lastseen[c]>=left){
+                left=lastseen[c]+1;
+            }
+            lastseen[c]=right;
+            maxlen=max(maxlen,right-left+1);
+        }
+        return maxlen;
+    }
+};
+
+
+Dry Run: "abcabcbb"
+right=0 → "a", maxLen=1
+right=1 → "ab", maxLen=2
+right=2 → "abc", maxLen=3
+right=3 → sees "a" again → move left=1 → window "bca"
+continue… final maxLen=3.
+
+
+Complexity
+Time: O(n) (each char processed once).
+Space: O(min(n, charset)) → O(26) for lowercase or O(256) ASCII.
