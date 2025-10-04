@@ -1,0 +1,47 @@
+Optimal Approach: Two Pointers
+Use two pointers: left=0, right=n-1.
+Compute area = min(height[left], height[right]) * (right-left).
+Move the pointer with the smaller height, since the limiting factor is the shorter line.
+Keep updating max area.
+
+
+code:
+class Solution{
+public:
+    int maxArea(vector<int>& height){
+        int n=height.size();
+        int left=0;
+        int right=n-1;
+        int maxarea=0;
+        while(left<right){
+            int h=min(height[left],height[right]);
+            int area=h*(right-left);
+            maxarea=max(maxarea,area);
+
+            if(height[right]<height[left]){
+                right--;
+            }else{
+                left++;
+            }
+        }
+        return maxarea;
+    }
+};
+
+
+
+Dry Run
+Input: height = [1,8,6,2,5,4,8,3,7]
+left=0 (1), right=8 (7) → area=1*8=8
+move left (since 1<7)
+left=1 (8), right=8 (7) → area=7*7=49 ✅ max
+right=7 (3), area=3*6=18
+right=6 (8), area=8*5=40
+right=5 (4), area=4*4=16 … continue
+Answer = 49
+
+
+
+Complexity
+Time: O(n)
+Space: O(1)
