@@ -1,0 +1,45 @@
+Approach (Expand Around Center, Optimal)
+A palindrome mirrors around a center.
+There are 2n-1 centers (each char + gaps between chars).
+Expand outward for each center and count palindromes.
+but instead of counting, we track longest substring length & start index.
+
+
+code:
+class Solution{
+public:
+    string longestPalindrome(string s){
+        int n=s.size();
+        int start=0;
+        int maxlen=1;
+        auto expand=[&](int left,int right){
+            while(left>=0 && right<n &&s[left]==s[right]){
+                if(right-left+1>maxlen){
+                    start=left;
+                    maxlen=right-left+1;
+                }
+                left--;
+                right++;
+            }
+        };
+        for(int i=0;i<n;i++){
+            expand(i,i);
+            expand(i,i+1);
+        }
+        return s.substr(start,maxlen);
+    }
+};
+
+
+Dry Run
+s = "babad"
+Center 0 (b): odd → "b".
+Center 1 (a): odd → "aba" (len 3).
+Center 2 (b): odd → "bab" (len 3).
+Longest found = "bab" (or "aba").
+
+
+
+Complexity
+Time: O(n²)
+Space: O(1)
