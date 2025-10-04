@@ -1,0 +1,49 @@
+Approach (Sliding Window + Frequency Count)
+Store frequency count of characters in p.
+Use a sliding window of size p.length() on s.
+Compare window frequency with p’s frequency.
+If match → store start index.
+Optimized: Keep a match counter instead of comparing arrays directly.
+
+
+code:
+class Solution{
+public:
+    vector<int> findAnagrams(string s,string p){
+        vector<int> res;
+        if(s.size()<p.size()) return res;
+        vector<int> counts(26,0),countp(26,0);
+        for(char c:p) countp[c-'a']++;
+        int k=p.size();
+        for(int i=0;i<s.size();i++){
+            counts[s[i]-'a']++;
+
+            if(i>=k){
+                counts[s[i-k]-'a']--;
+            }
+            if(counts==countp){
+                res.push_back(i-k+1);
+            }
+        }
+        return res;
+    }
+};
+
+
+
+Dry Run
+Input: s="cbaebabacd", p="abc"
+Window cba → anagram → index 0
+Window bae → not
+Window aeb → not
+Window eba → not
+Window bab → not
+Window aba → not
+Window bac → anagram → index 6
+Output: [0,6]
+
+
+
+Complexity
+Time: O(n)
+Space: O(1) (since only 26 chars)
