@@ -1,0 +1,38 @@
+Key Idea
+The minimum is the inflection point (where rotation happened).
+Use binary search:
+If nums[mid] > nums[right] → minimum must be in right half.
+Else → minimum is in left half (including mid).
+Eventually, left will point to the minimum.
+
+
+code:
+class Solution{
+public:
+    int findMin(vector<int>& nums){
+        int left=0,right=nums.size()-1;
+        while(left<right){
+            int mid=left+(right-left)/2;
+            if(nums[mid]>nums[right]){
+                left=mid+1;
+            }else{
+                right=mid;
+            }
+        }
+        return nums[left];
+    }
+};
+
+
+
+Dry Run
+Input: nums = [4,5,6,7,0,1,2]
+left=0, right=6 → mid=3 → nums[3]=7 > nums[6]=2 → move left=4
+left=4, right=6 → mid=5 → nums[5]=1 < nums[6]=2 → move right=5
+left=4, right=5 → mid=4 → nums[4]=0 < nums[5]=1 → move right=4
+left==right → return nums[4]=0 
+
+
+Complexity
+Time: O(log n)
+Space: O(1)
