@@ -1,0 +1,39 @@
+Approach (Sliding Window + Hash Map)
+Use two pointers left and right for sliding window.
+Use a hash map (or array of size 256) to store last index of characters.
+Expand right each step:
+If s[right] was seen before inside the window → move left to max(left, lastSeen[s[right]] + 1).
+Update maxLen.
+
+
+
+code:
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        vector<int> lastindex(256,-1);
+        int left=0,maxlen=0;
+        for(int right=0;right<s.size();right++){
+            if(lastindex[s[right]]>=left){
+                left=lastindex[s[right]]+1;
+            }
+            lastindex[s[right]]=right;
+            maxlen=max(maxlen,right-left+1);
+        }
+        return maxlen;
+    }
+};
+
+
+
+Dry Run ("abcabcbb")
+abc → length 3
+repeat a at index 3 → shift left → window bca
+repeat b later → shift again
+Max length = 3
+
+
+
+Complexity
+Time: O(n)
+Space: O(1) (fixed 256 array for ASCII)
