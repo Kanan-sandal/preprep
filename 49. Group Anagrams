@@ -1,0 +1,80 @@
+1. Sorting Key (Easy & Intuitive)
+Sort each word → use sorted string as a key in hash map.
+Example: "eat" → "aet", "tea" → "aet".
+Group words by key.
+
+code:
+class Solution{
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs){
+        unordered_map<string,vector<string>> mp;
+        for(string s:strs){
+            string key=s;
+            sort(key.begin(),key.end());
+            mp[key].push_back(s);
+        }
+        vector<vector<string>> result;
+        for(auto& entry:mp){
+            result.push_back(entry.second);
+        }
+        return result;
+    }
+};
+
+
+Time Complexity: O(n * k log k)
+Space: O(n * k)
+
+
+
+Idea
+For each word, build a 26-length frequency array (since only lowercase a-z).
+Convert this array into a tuple/string and use it as a hash key in a map.
+All words with the same frequency array are anagrams.
+
+
+
+code:
+class Solution{
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs){
+        unordered_map<string,vector<string>> mp;
+        for(string s:strs){
+            vector<int> count(26,0);
+            for(char c:s) count[c-'a']++;
+
+            string key;
+            for(int num:count){
+                key+=to_string(num)+"#";
+            }
+            mp[key].push_back(s);
+        }
+        vector<vector<string>> result;
+        for(auto& entry:mp){
+            result.push_back(entry.second);
+        }
+        return result;
+    }
+};
+
+
+
+
+Dry Run
+Input: ["eat","tea","tan","ate","nat","bat"]
+"eat" → count key = 1#0#0#0#1#...
+"tea" → same key
+"tan" → different key
+"nat" → same as "tan"
+"bat" → different key
+Groups:
+[eat, tea, ate]
+[tan, nat]
+[bat]
+
+
+
+Complexity
+Building frequency array: O(k) per word
+Total: O(n * k) (better than O(n * k log k) for sorting)
+Space: O(n * k) for storing groups
