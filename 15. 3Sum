@@ -1,0 +1,59 @@
+Optimal Approach: Sorting + Two Pointers
+Sort the array → ensures duplicates can be skipped easily.
+Fix one number nums[i] (loop over i).
+For each fixed i, use two pointers:
+left = i+1 and right = n-1
+While left < right:
+Compute sum = nums[i] + nums[left] + nums[right]
+If sum == 0 → store triplet, skip duplicates.
+If sum < 0 → increase left.
+If sum > 0 → decrease right.
+Skip duplicate values for i to avoid duplicate triplets.
+
+
+code:
+class Solution{
+public:
+    vector<vector<int>> threeSum(vector<int>& nums){
+        vector<vector<int>> res;
+        sort(nums.begin(),nums.end());
+        int n=nums.size();
+        for(int i=0;i<n;i++){
+            if(i>0 && nums[i]==nums[i-1]) continue;
+            int left=i+1,right=n-1;
+            while(left<right){
+                int sum=nums[i]+nums[left]+nums[right];
+                if(sum==0){
+                    res.push_back({nums[i],nums[left],nums[right]});
+
+                    while(left<right && nums[left]==nums[left+1]) left++;
+                    while(left<right && nums[right]==nums[right-1]) right--;
+                    left++;
+                    right--;
+                }
+                else if(sum<0) left++;
+                else right--;
+            }
+        }
+        return res;
+    }
+};
+
+
+
+Dry Run
+Input: nums = [-1, 0, 1, 2, -1, -4]
+Sorted: [-4, -1, -1, 0, 1, 2]
+i=0 (-4) → left=1, right=5 → sum=-3 (increase left) → no triplets.
+i=1 (-1) → left=2, right=5 → sum=0 → triplet [-1,-1,2].
+left=3, right=4 → sum=0 → triplet [-1,0,1].
+i=2 (-1) → skip duplicate.
+i=3 (0) → left=4, right=5 → sum=3 (decrease right) → no triplets.
+
+Result: [[-1,-1,2], [-1,0,1]]
+
+
+
+Complexity
+Time: O(n²) (sorting O(n log n) + two-pointer O(n²))
+Space: O(1) (ignoring result storage)
