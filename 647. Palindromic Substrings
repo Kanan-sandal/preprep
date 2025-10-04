@@ -44,3 +44,42 @@ Longest found = "bab" (or "aba").
 Complexity
 Time: O(n²)
 Space: O(1)
+
+
+
+
+
+How do we calculate left and right?
+left = center/2
+right = left + center%2
+If center is even, both left and right point to same char (odd length palindrome).
+If center is odd, right = left+1 → gap between two chars (even length palindrome).
+
+
+
+3. Expansion
+From each center, expand outwards (left--, right++) while characters match.
+Each time we expand successfully, we count a new palindrome.
+
+
+
+Dry Run Example: "aaa"
+n = 3, so 2n-1 = 5 centers.
+center=0 → (left=0,right=0)
+expand "a" → count=1
+center=1 → (left=0,right=1)
+expand "aa" → count=2
+center=2 → (left=1,right=1)
+expand "a" → count=3
+expand "aaa" → count=4
+center=3 → (left=1,right=2)
+expand "aa" → count=5
+center=4 → (left=2,right=2)
+expand "a" → count=6
+Answer = 6
+
+
+
+Complexity
+Time: O(n²) (in worst case like "aaaaa" every expansion works).
+Space: O(1)
