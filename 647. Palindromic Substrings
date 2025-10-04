@@ -1,0 +1,46 @@
+Approach (Expand Around Center, Optimal)
+Same as above, but instead of counting, we track longest substring length & start index.
+
+
+Explanation of Key Logic
+ 1. Why 2*n - 1 centers?
+A palindrome can be centered on:
+A character itself (odd length palindrome, e.g. "aba").
+A gap between two characters (even length palindrome, e.g. "abba").
+For a string of length n, there are n character-centers + n-1 gaps = 2n-1 total centers.
+
+
+
+code:
+class Solution{
+public:
+    int countSubstrings(string s){
+        int n=s.size();
+        int count=0;
+        for(int center=0;center<2*n-1;center++){
+            int left=center/2;
+            int right=left+center%2;
+
+            while(left>=0 && right<n && s[left]==s[right]){
+                count++;
+                left--;
+                right++;
+            }
+        }
+        return count;
+    }
+};
+
+
+
+Dry Run
+s = "babad"
+Center 0 (b): odd → "b".
+Center 1 (a): odd → "aba" (len 3).
+Center 2 (b): odd → "bab" (len 3).
+Longest found = "bab" (or "aba").
+
+
+Complexity
+Time: O(n²)
+Space: O(1)
