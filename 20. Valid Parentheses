@@ -1,0 +1,45 @@
+Approach (Stack)
+Use a stack to keep track of opening brackets.
+When you see a closing bracket:
+If stack is empty → invalid.
+Pop top and check if it matches.
+In the end, stack should be empty.
+
+
+code:
+class Solution{
+public:
+    bool isValid(string s){
+        stack<char> st;
+        unordered_map<char,char> mp={
+            {')','('},{'}','{'},{']','['}
+        };
+        for(char c:s){
+            if(mp.count(c)){
+                if(st.empty() || st.top()!=mp[c]) return false;
+                st.pop();
+            }else{
+                st.push(c);
+            }
+        }
+        return st.empty();
+    }
+};
+
+
+
+Dry Run
+s = "([{}])"
+Push ( → [(
+Push [ → [([
+Push { → [([{
+See } → pop { → valid
+See ] → pop [ → valid
+See ) → pop ( → valid
+Stack empty  return true.
+
+
+
+Complexity
+Time: O(n)
+Space: O(n) (stack worst case)
