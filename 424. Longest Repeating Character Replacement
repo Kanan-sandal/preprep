@@ -1,0 +1,38 @@
+Approach (Sliding Window)
+Use two pointers (left, right) for the sliding window.
+Keep frequency of characters inside window (unordered_map<char,int> or vector<int> of size 26).
+Track maxFreq = max frequency of any character in the window.
+Condition: window is valid if
+(window length - maxFreq) <= k.
+Means we can make the whole window uniform by changing at most k chars.
+If invalid → shrink window by moving left.
+Keep updating maxLen.
+
+
+
+code:
+class Solution{
+public:
+    int characterReplacement(string s,int k){
+        vector<int> freq(26,0);
+        int left=0,maxfreq=0,maxlen=0;
+        for(int right=0;right<s.size();right++){
+            freq[s[right]-'A']++;
+            maxfreq=max(maxfreq,freq[s[right]-'A']);
+
+            while((right-left+1)-maxfreq>k){
+                freq[s[left]-'A']--;
+                left++;
+            }
+            maxlen=max(maxlen,right-left+1);
+        }
+        return maxlen;
+    }
+};
+
+
+
+
+Complexity
+Time: O(n) (each char processed once).
+Space: O(26) = O(1).
