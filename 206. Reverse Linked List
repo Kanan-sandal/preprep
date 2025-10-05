@@ -1,0 +1,78 @@
+Approaches
+1. Iterative (Optimal)
+Maintain 3 pointers: prev, curr, next.
+Traverse and reverse links.
+
+code:
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution{
+public:
+    ListNode* reverseList(ListNode* head){
+        ListNode* prev=nullptr;
+        ListNode* curr=head;
+        while(curr){
+            ListNode* next=curr->next;
+            curr->next=prev;
+            prev=curr;
+            curr=next;
+        }
+        return prev;
+    }
+};
+
+
+Dry Run (Iterative Example)
+List: 1 → 2 → 3 → NULL
+prev = NULL, curr = 1
+Reverse 1 → NULL, move prev=1, curr=2
+Reverse 2 → 1 → NULL, prev=2, curr=3
+Reverse 3 → 2 → 1 → NULL, prev=3, curr=NULL
+Output = head = 3
+
+
+⏱ TC: O(n)
+💾 SC: O(1)
+
+
+
+
+2. Recursive
+Base case: if head == NULL or head->next == NULL → return head.
+Recursively reverse rest and adjust links.
+
+
+code:
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution{
+public:
+    ListNode* reverseList(ListNode* head){
+        if(!head || !head->next) return head;
+        ListNode* newhead=reverseList(head->next);
+        head->next->next=head;
+        head->next=nullptr;
+        return newhead; 
+    }
+};
+
+
+
+⏱ TC: O(n)
+💾 SC: O(n) (stack recursion)
