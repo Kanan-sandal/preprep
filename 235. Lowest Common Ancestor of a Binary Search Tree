@@ -1,0 +1,88 @@
+Approach (BST property)
+If both p and q are smaller than root → LCA is in left subtree.
+If both are larger → LCA is in right subtree.
+Otherwise → current root is the LCA.
+
+
+RECURSIVE:
+code:
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+class Solution{
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root,TreeNode* p,TreeNode* q){
+        if(!root) return nullptr;
+        if(p->val<root->val && q->val<root->val){
+            return lowestCommonAncestor(root->left,p,q);
+        }else if(p->val>root->val && q->val>root->val){
+            return lowestCommonAncestor(root->right,p,q);
+        }else{
+            return root;
+        }
+    }
+};
+
+
+
+Dry Run
+Tree:
+
+       6
+      / \
+     2   8
+    / \ / \
+   0  4 7 9
+     / \
+    3   5
+
+
+p=2, q=8
+root=6 → 2 < 6 < 8 →  LCA = 6
+p=2, q=4
+root=6 → both < 6 → go left
+root=2 → split → LCA = 2
+
+
+Complexity
+Time: O(h), h = height of tree
+Space: O(h) recursion (O(1) if iterative)
+
+
+
+
+ITERATIVE (less sc)
+code:
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+
+class Solution{
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root,TreeNode* p,TreeNode* q){
+        if(!root) return nullptr;
+        while(root){
+            if(p->val<root->val && q->val<root->val){
+                root=root->left;
+            }else if(p->val>root->val && q->val>root->val){
+                root=root->right;
+            }else{
+                return root;
+            }
+        }
+        return nullptr;
+    }
+};
