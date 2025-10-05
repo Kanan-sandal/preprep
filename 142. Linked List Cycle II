@@ -1,0 +1,60 @@
+We don’t just detect a cycle — we must find the starting node of the cycle.
+Approach (Floyd’s + Reset Trick)
+Step 1: Use Floyd’s algorithm to detect the cycle (same as above).
+Step 2: Once slow == fast, reset one pointer to head.
+Step 3: Move both slow and fast one step at a time → they’ll meet at the cycle start.
+
+
+code:
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution{
+public:
+    ListNode* detectCycle(ListNode* head){
+        if(!head || !head->next) return NULL;
+        ListNode* slow=head;
+        ListNode* fast=head;
+        bool hascycle=false;
+        while(fast && fast->next){
+            slow=slow->next;
+            fast=fast->next->next;
+            if(slow==fast){
+                hascycle=true;
+                break;
+            }
+        }
+        if(!hascycle) return NULL;
+
+        slow=head;
+        while(slow!=fast){
+            slow=slow->next;
+            fast=fast->next;
+        }
+        return slow;
+    }
+};
+
+
+Input:
+1 → 2 → 3 → 4 → 5 → 3 (cycle starts at node 3)
+Steps:
+Step 1: Detect cycle
+slow=1, fast=1
+Iter 1: slow=2, fast=3
+Iter 2: slow=3, fast=5
+Iter 3: slow=4, fast=4 ✅ meet → cycle detected.
+Step 2: Find cycle start
+Reset slow = head (1), fast = meeting point (4).
+Iter 1: slow=2, fast=5
+Iter 2: slow=3, fast=3 ✅ meet again at 3 (cycle start).
+Output: node with value 3.
+
+
+⏱️ Time: O(n)
+📦 Space: O(1)
