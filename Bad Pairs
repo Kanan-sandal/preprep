@@ -1,0 +1,38 @@
+USING STACK:
+
+string removeBadPairs(string s) {
+    stack<char> st;
+    for(char c : s) {
+        if(!st.empty() && abs(st.top() - c) == 32) { 
+            // ASCII difference between 'a' and 'A' is 32
+            st.pop();
+        } else {
+            st.push(c);
+        }
+    }
+    string result;
+    while(!st.empty()) {
+        result.push_back(st.top());
+        st.pop();
+    }
+    reverse(result.begin(), result.end());
+    return result;
+}
+
+
+TWO POINTER:
+
+string removeBadPairs(string s) {
+    int n = s.size();
+    int i = 0; 
+
+    for (int j = 0; j < n; j++) {  
+        if (i > 0 && abs(s[i-1] - s[j]) == 32) {
+            i--; 
+        } else {
+            s[i] = s[j]; 
+            i++;        
+        }
+    }
+    return s.substr(0, i);
+}
