@@ -1,0 +1,53 @@
+Approach
+Use a dummy node for simplicity.
+Compare heads of both lists, attach smaller node, move pointer.
+Finally attach remaining nodes.
+
+
+code:
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution{
+public:
+    ListNode* mergeTwoLists(ListNode* l1,ListNode* l2){
+        ListNode dummy(-1);
+        ListNode* tail=&dummy;
+        while(l1 && l2){
+            if(l1->val<l2->val){
+                tail->next=l1;
+                l1=l1->next;
+            }else{
+                tail->next=l2;
+                l2=l2->next;
+            }
+            tail=tail->next;
+        }
+        tail->next=(l1?l1:l2);
+       return dummy.next;
+    }
+};
+
+
+Dry Run Example
+l1 = 1 → 3 → 5
+l2 = 2 → 4 → 6
+dummy → -1 → NULL, tail at dummy
+Compare 1 vs 2 → pick 1 → dummy → -1 → 1
+Compare 3 vs 2 → pick 2 → -1 → 1 → 2
+Compare 3 vs 4 → pick 3 → -1 → 1 → 2 → 3
+Compare 5 vs 4 → pick 4 → -1 → 1 → 2 → 3 → 4
+Compare 5 vs 6 → pick 5 → -1 → 1 → 2 → 3 → 4 → 5
+Leftover 6 → attach → -1 → 1 → 2 → 3 → 4 → 5 → 6
+Return dummy.next (skips -1). 
+
+
+⏱ TC: O(m + n) (m = length of l1, n = length of l2)
+💾 SC: O(1)
