@@ -1,0 +1,47 @@
+Approach (Floyd’s Cycle Detection / Tortoise & Hare)
+Use two pointers:
+slow moves 1 step at a time.
+fast moves 2 steps at a time.
+If slow == fast at some point → cycle exists.
+If fast or fast->next becomes NULL → no cycle.
+
+
+code:
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution{
+public:
+    bool hasCycle(ListNode* head){
+        if(!head || !head->next) return false;
+        ListNode* slow=head;
+        ListNode* fast=head;
+
+        while(fast && fast->next){
+            slow=slow->next;
+            fast=fast->next->next;
+
+            if(slow==fast) return true;
+        }
+        return false;
+    }
+};
+
+
+Input:
+1 → 2 → 3 → 4 → 2 (cycle)
+Steps:
+slow = head (1), fast = head (1)
+Iteration 1: slow=2, fast=3
+Iteration 2: slow=3, fast=2
+Iteration 3: slow=4, fast=4 ✅ → they meet → cycle exists.
+Output: true
+
+
+⏱️ Time: O(n)
+📦 Space: O(1)
