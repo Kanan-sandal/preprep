@@ -1,0 +1,56 @@
+Approach
+Post-order DFS → compute subtree height.
+If difference > 1, mark unbalanced.
+Return -1 if unbalanced.
+abs:is used for calculating absolute value of a number. The absolute value of a number is its non-negative magnitude, regardless of its sign.
+
+code:
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution{
+public:
+    int dfs(TreeNode* root){
+        if(!root) return 0;
+        int left=dfs(root->left);
+        if(left==-1) return -1;
+        int right=dfs(root->right);
+        if(right==-1) return -1;
+        if(abs(left-right)>1) return -1;
+        return 1+max(left,right);
+    }
+    bool isBalanced(TreeNode* root){
+        return dfs(root)!=-1;
+    }
+};
+
+
+Dry Run
+
+Input:
+
+    1
+   / \
+  2   2
+ / \
+3   3
+/
+4
+
+DFS(4)=1.
+DFS(3)=2.
+Left subtree height=3, right=1 → difference=2 → return -1.
+Tree unbalanced.
+
+
+⏱ Complexity
+Time: O(n) (visit each node once).
+Space: O(h) recursion stack.
