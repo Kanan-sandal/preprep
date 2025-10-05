@@ -1,0 +1,65 @@
+Approach
+Use a dummy node to build the result.
+Traverse both lists:
+sum = carry + (l1?val : 0) + (l2?val : 0)
+digit = sum % 10
+carry = sum / 10
+Append digit to result.
+At end, if carry > 0 → append it.
+
+
+code:
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution{
+public:
+    ListNode* addTwoNumbers(ListNode* l1,ListNode* l2){
+        ListNode dummy(0);
+        ListNode* tail=&dummy;
+
+        int carry=0;
+        while(l1 || l2 || carry){
+            int sum=carry;
+            if(l1) {sum+=l1->val;l1=l1->next;}
+            if(l2) {sum+=l2->val;l2=l2->next;}
+
+            carry=sum/10;
+            tail->next=new ListNode(sum%10);
+            tail=tail->next;
+        }
+        return dummy.next;
+    }
+};
+
+
+
+Input:
+l1 = 2 → 4 → 3 (represents 342)
+l2 = 5 → 6 → 4 (represents 465)
+Expected Output: 7 → 0 → 8 (represents 807)
+Steps:
+Dummy = -1, carry = 0
+First nodes:
+sum = 2 + 5 + 0 = 7 → digit=7, carry=0
+result = -1 → 7
+Second nodes:
+sum = 4 + 6 + 0 = 10 → digit=0, carry=1
+result = -1 → 7 → 0
+Third nodes:
+sum = 3 + 4 + 1 (carry) = 8 → digit=8, carry=0
+result = -1 → 7 → 0 → 8
+End: no carry left.
+Output: 7 → 0 → 8
+
+
+
+⏱️ Time: O(max(m, n))
+📦 Space: O(1) (excluding output list)
