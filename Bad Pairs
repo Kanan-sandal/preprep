@@ -36,3 +36,8 @@ string removeBadPairs(string s) {
     }
     return s.substr(0, i);
 }
+
+
+Complexity
+Time: O(n) (single scan).
+Space: O(1) (modifies input string in place).
