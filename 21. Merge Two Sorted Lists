@@ -51,3 +51,58 @@ Return dummy.next (skips -1).
 
 ⏱ TC: O(m + n) (m = length of l1, n = length of l2)
 💾 SC: O(1)
+
+
+
+
+RECURSIVE CODE:
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        if(!l1) return l2;
+        if(!l2) return l1;
+
+        if(l1->val<l2->val){
+            l1->next=mergeTwoLists(l1->next,l2);
+            return l1;
+        }else{
+            l2->next=mergeTwoLists(l1,l2->next);
+            return l2;
+        }
+    }
+};
+
+
+
+How it works (dry run)
+Example:
+l1 = 1 → 3 → 5
+l2 = 2 → 4 → 6
+Compare 1 and 2 → 1 smaller → set 1->next = mergeTwoLists(3→5, 2→4→6)
+Inside that call: compare 3 and 2 → 2 smaller → set 2->next = mergeTwoLists(3→5, 4→6)
+Inside that call: compare 3 and 4 → 3 smaller → set 3->next = mergeTwoLists(5, 4→6)
+Compare 5 and 4 → 4 smaller → set 4->next = mergeTwoLists(5, 6)
+Compare 5 and 6 → 5 smaller → set 5->next = mergeTwoLists(NULL, 6)
+Base case: l1 == NULL → return 6.
+Final merged list:
+1 → 2 → 3 → 4 → 5 → 6
+
+
+
+
+🕒 Time Complexity
+Each node is visited exactly once → O(m + n)
+where m = length of l1, n = length of l2.
+📦 Space Complexity
+O(m + n) recursion stack (worst case, if lists are long and skewed).
+The iterative dummy-node solution is O(1) extra space, so that one is better for very large lists.
