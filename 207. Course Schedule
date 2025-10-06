@@ -1,0 +1,47 @@
+Approaches
+DFS Cycle Detection (Directed Graph → detect cycle using recursion stack).
+BFS (Kahn’s Algorithm – Topological Sort).
+
+
+code(BFS):
+class Solution{
+public:
+    bool canFinish(int numCourses,vector<vector<int>>& prerequisites){
+        vector<int> indegree(numCourses,0);
+        vector<vector<int>> graph(numCourses);
+
+        for(auto& pre:prerequisites){
+            graph[pre[1]].push_back(pre[0]);
+            indegree[pre[0]]++;
+        }
+        queue<int> q;
+        for(int i=0;i<numCourses;i++){
+            if(indegree[i]==0) q.push(i);
+        }
+        int count=0;
+        while(!q.empty()){
+            int course=q.front();q.pop();
+            count++;
+            for(int neighbor:graph[course]){
+                indegree[neighbor]--;
+                if(indegree[neighbor]==0) q.push(neighbor);
+            }
+        }
+        return count==numCourses;
+    }
+};
+
+
+Dry Run
+Input: numCourses=2, prerequisites={{1,0}}
+Graph: 0 -> 1
+indegree: [0,1]
+Push 0 in queue.
+Process 0 → reduce indegree of 1 → indegree[1]=0 → push 1.
+Process 1 → done.
+Count=2 = numCourses → ✅ return true.
+
+
+TC & SC
+Time Complexity: O(V+E) (V = numCourses, E = prerequisites)
+Space Complexity: O(V+E) (graph + indegree + queue)
