@@ -1,0 +1,61 @@
+Idea: Use two stacks: inStack for pushes, outStack for pops/peeks. When outStack is empty and we need to pop/peek, move all elements from inStack → outStack. Amortized O(1) per operation.
+Steps
+push(x): push into inStack.
+pop(): ensure outStack not empty (move if needed), then pop from outStack.
+peek(): ensure outStack not empty, then return outStack.top().
+empty(): true if both stacks empty.
+
+
+code:
+class MyQueue{
+private:
+    stack<int> inStack,outStack;
+    void moveInToOut(){
+        if(outStack.empty()){
+            while(!inStack.empty()){
+                outStack.push(inStack.top());
+                inStack.pop();
+            }
+        }
+    }
+public:
+    MyQueue(){}
+    void push(int x){
+        inStack.push(x);
+    }
+    int pop(){
+        moveInToOut();
+        int val=outStack.top();
+        outStack.pop();
+        return val;
+    }
+    int peek(){
+        moveInToOut();
+        return outStack.top();
+    }
+    bool empty(){
+        return inStack.empty() && outStack.empty();
+    }
+};
+/**
+ * Your MyQueue object will be instantiated and called as such:
+ * MyQueue* obj = new MyQueue();
+ * obj->push(x);
+ * int param_2 = obj->pop();
+ * int param_3 = obj->peek();
+ * bool param_4 = obj->empty();
+ */
+
+
+Dry run
+Operations: push(1), push(2), peek(), pop(), empty()
+push 1 -> in: [1]
+push 2 -> in: [1,2] (top is 2)
+peek -> move to out -> out: [2,1] ; peek = 1
+pop -> pop out -> returns 1 ; out: [2]
+empty -> false
+
+
+Complexity
+Time: amortized O(1) per operation (move cost amortized)
+Space: O(n)
