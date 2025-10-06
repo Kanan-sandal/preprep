@@ -1,0 +1,59 @@
+Approaches
+Min-Heap of size k → keep largest k elements. Top is answer.
+Quickselect (Hoare’s Partition, avg O(n)) → in-place, no heap.
+
+
+code(quickselect):
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        int n=nums.size();
+        nth_element(nums.begin(),nums.end()-k,nums.end());
+        return nums[n-k];
+    }
+};
+
+
+
+Dry Run
+Input: nums = [3,2,1,5,6,4], k = 2
+nth_element(nums.begin(), nums.end()-2, nums.end())
+→ ensures nums[4] (since n-k=6-2=4) is the 2nd largest.
+Array after partition (not fully sorted): [3,2,1,4,5,6]
+Element at index 4 = 5.
+That’s the 2nd largest.
+Return 5 
+
+
+⏱️ Complexity
+Average Time: O(n)
+Worst Case: O(n^2) (rare, depends on pivot selection)
+Space: O(1) (in-place partitioning).
+
+
+
+code(minheap):
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        priority_queue<int,vector<int>,greater<int>> minheap;
+        for(int num:nums){
+            minheap.push(num);
+            if(minheap.size()>k){
+                minheap.pop();
+            }
+        }
+        return minheap.top();
+    }
+};
+
+
+Dry Run
+Input: [3,2,1,5,6,4], k=2
+Heap after inserting: [3] → [2,3] → [2,3,1] → pop → [2,3] … continue
+Final heap: [5,6] → top=5 (2nd largest).
+
+
+TC & SC
+Time: O(n log k)
+Space: O(k)
