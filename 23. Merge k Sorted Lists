@@ -1,0 +1,58 @@
+Approach
+Use a min-heap storing (val, node) across all lists.
+Pop smallest, attach to result, push its next node.
+
+code:
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution{
+public:
+    struct compare{
+        bool operator()(ListNode* a,ListNode* b){
+            return a->val>b->val;
+        }
+    };
+    ListNode* mergeKLists(vector<ListNode*>& lists){
+        priority_queue<ListNode*,vector<ListNode*>,compare> minheap;
+        for(auto l:lists){
+            if(l) minheap.push(l);
+        }
+        ListNode dummy(-1);
+        ListNode* tail=&dummy;
+
+        while(!minheap.empty()){
+            ListNode* node=minheap.top();minheap.pop();
+            tail->next=node;
+            tail=tail->next;
+            if(node->next){
+                minheap.push(node->next);
+            }
+        }
+        return dummy.next;
+    }
+};
+
+
+
+Dry Run
+Input:
+lists = [[1,4,5],[1,3,4],[2,6]]
+Heap = {1,1,2}
+Pop 1 → attach → push 4
+Heap = {1,2,4}
+Pop 1 → attach → push 3
+Continue until merged list = [1,1,2,3,4,4,5,6]
+
+
+
+TC & SC
+Time: O(N log k) where N = total nodes, k = number of lists.
+Space: O(k) (heap).
