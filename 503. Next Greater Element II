@@ -1,0 +1,45 @@
+Idea: Use monotonic stack but iterate the array twice (simulate circularity). Use indices on stack.
+Steps
+Initialize result array of size n with -1.
+Iterate i from 0 to 2*n - 1:
+Let idx = i % n.
+While stack not empty and nums[idx] > nums[stack.top()], set res[stack.top()] = nums[idx], pop stack.
+If i < n, push idx onto stack (only push original indices during first pass).
+Remaining indices in stack have result -1.
+
+
+code:
+class Solution{
+public:
+    vector<int> nextGreaterElements(vector<int>& nums){
+        int n=nums.size();
+        vector<int> res(n,-1);
+        stack<int> st;
+
+        for(int i=0;i<2*n;++i){
+            int idx=i%n;
+            while(!st.empty() && nums[idx]>nums[st.top()]){
+                res[st.top()]=nums[idx];
+                st.pop();
+            }
+            if(i<n) st.push(idx);
+        }
+        return res;
+    }
+};
+
+
+
+Dry run
+nums = [1,2,1], n=3
+i=0 idx=0 -> push 0 -> st:[0]
+i=1 idx=1 -> 2 > 1 -> res[0]=2, pop; push 1 -> st:[1]
+i=2 idx=2 -> 1 <= 2 -> push 2 -> st:[1,2]
+i=3 idx=0 -> 1 > ? stack top 2 has nums[2]=1 -> not greater; but i>=n so we don't push; check while: nums[0]=1 > nums[2]=1? no
+i=4 idx=1 -> nums[1]=2 > nums[2]=1 -> res[2]=2 pop; nums[1] > nums[1]? no
+Final res = [2,-1,2]
+
+
+Complexity
+Time: O(n) (each index pushed/popped at most once over 2n loop)
+Space: O(n) for stack + result array
