@@ -1,0 +1,69 @@
+Approach
+We use two stacks:
+st → regular stack to hold all elements.
+minst → keeps track of the current minimums.
+Rules:
+On push(val) → push into st. Also push into minst if:
+minst is empty OR
+val <= minst.top() (new minimum).
+On pop() → remove from st. If the popped value equals minst.top(), also pop from minst.
+top() → just return st.top().
+getMin() → just return minst.top() (since top of minst always stores the current minimum).
+
+
+code:
+class MinStack{
+    stack<int> st,minst;
+public:
+    MinStack(){}
+    void push(int val){
+        st.push(val);
+        if(minst.empty() || val<=minst.top()){
+            minst.push(val);
+        }
+    }
+    void pop(){
+        if(st.top()==minst.top()){
+            minst.pop();
+        }
+        st.pop();
+    }
+    int top(){
+        return st.top();
+    }
+    int getMin(){
+        return minst.top();
+    }
+};
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack* obj = new MinStack();
+ * obj->push(val);
+ * obj->pop();
+ * int param_3 = obj->top();
+ * int param_4 = obj->getMin();
+ */
+
+
+
+Dry Run
+MinStack* obj = new MinStack();
+obj->push(3);   // st = [3], minst = [3]
+obj->push(5);   // st = [3,5], minst = [3]
+obj->push(2);   // st = [3,5,2], minst = [3,2]  (2 is new min)
+obj->push(1);   // st = [3,5,2,1], minst = [3,2,1]  (1 is new min)
+
+obj->getMin();  // returns 1 (top of minst)
+obj->pop();     // pops 1 → st = [3,5,2], minst = [3,2]
+obj->getMin();  // returns 2
+obj->top();     // returns 2
+
+
+
+Complexity Analysis
+push() → O(1)
+pop() → O(1)
+top() → O(1)
+getMin() → O(1)
+Space Complexity → O(n) (worst case, if numbers are in strictly decreasing order → every element gets stored in minst).
