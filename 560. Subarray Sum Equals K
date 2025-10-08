@@ -43,3 +43,36 @@ i=2: sum=3 → sum-k=1 → 1 in map → count+=1 → count=2
 Complexity
 Time: O(n) → one pass
 Space: O(n) → hashmap of prefix sums
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Solution{
+public:
+    int subarraySum(vector<int>& nums,int k){
+        unordered_map<int,int> mp;
+        mp[0]=1;
+        int prefixsum=0,count=0;
+        for(int num:nums){
+            prefixsum+=num;
+
+            if(mp.find(prefixsum-k)!=mp.end()){
+                count+=mp[prefixsum-k];
+            }
+            mp[prefixsum]++;
+        }
+        return count;
+    }
+};
