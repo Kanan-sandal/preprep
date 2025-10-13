@@ -53,7 +53,74 @@ Input: [3,2,1,5,6,4], k=2
 Heap after inserting: [3] → [2,3] → [2,3,1] → pop → [2,3] … continue
 Final heap: [5,6] → top=5 (2nd largest).
 
-
 TC & SC
 Time: O(n log k)
 Space: O(k)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class Solution{
+public:
+    int findKthLargest(vector<int>& nums,int k){
+        priority_queue<int,vector<int>,greater<int>> minheap;
+        for(int num:nums){
+            minheap.push(num);
+            if(minheap.size()>k){
+                minheap.pop();
+            }
+        }
+        return minheap.top();
+    }
+};
+
+
+
+class Solution{
+public:
+    int findKthLargest(vector<int>& nums,int k){
+        int n=nums.size();
+        nth_element(nums.begin(),nums.end()-k,nums.end());
+        return nums[n-k];
+    }
+};
