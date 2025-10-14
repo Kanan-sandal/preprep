@@ -1,0 +1,54 @@
+Intuition
+To make t an anagram of s, both strings should have the same frequency of every character.
+So the number of changes needed =
+→ count of characters in s that are extra (not matched in t).
+
+
+Approach – Frequency Difference
+Create a frequency array of size 26 for lowercase letters.
+Increment count for each character in s.
+Decrement count for each character in t.
+The positive values in the array represent extra letters in s that need replacements.
+Sum up all positive counts.
+
+
+code:
+class Solution {
+public:
+    int minSteps(string s, string t) {
+        vector<int> freq(26,0);
+        for(char c:s) freq[c-'a']++;
+        for(char c:t) freq[c-'a']--;
+        int steps=0;
+        for(int count:freq){
+            if(count>0){
+                steps+=count;
+            }
+        }
+        return steps;
+    }
+};
+
+
+Dry Run Example
+Input:
+s = "leetcode"
+t = "practice"
+
+Character	s	 t	 Difference
+l	        1	 0	  +1
+e	        3	 1	  +2
+t	        1	 1	   0
+c	        1	 1	   0
+o	        1	 0	  +1
+d	        1	 0	  +1
+p,r,a,i	  0	 4	  -4
+
+Total positive diff = 1 + 2 + 1 + 1 = 5
+
+Output → 5
+
+Complexity
+Metric	Complexity
+Time	O(n)
+Space	O(1) (constant 26 letters)
