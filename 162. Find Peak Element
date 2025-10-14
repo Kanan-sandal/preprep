@@ -1,0 +1,55 @@
+Intuition
+A peak must be in a region where numbers first rise and then fall.
+If we look at mid and compare it with mid + 1:
+If nums[mid] < nums[mid + 1] → the peak is on the right side (ascending slope).
+Else → the peak is on the left side (descending slope).
+This works because if the slope is going up, there must be a peak ahead.
+
+
+Approach – Binary Search
+Initialize left = 0, right = n - 1.
+While left < right:
+Compute mid = left + (right - left) / 2.
+If nums[mid] < nums[mid + 1], move right → left = mid + 1.
+Else, move left → right = mid.
+Return left (it will point to a peak).
+
+
+code:
+class Solution{
+public:
+    int findPeakElement(vector<int>& nums){
+        int n=nums.size();
+        int left=0,right=n-1;
+        while(left<right){
+            int mid=left+(right-left)/2;
+            if(nums[mid]<nums[mid+1]){
+                left=mid+1;
+            }else{
+                right=mid;
+            }
+        }
+        return left;
+    }
+};
+
+
+
+
+Dry Run
+Input:
+nums = [1,2,3,1]
+
+Step	left	right	mid	nums[mid]	nums[mid+1]	Action
+1	     0	    3	   1	  2	         3	      move right → left = 2
+2	     2	    3	   2	  3	         1	      move left → right = 2
+
+Left == right → return 2
+
+Output → 2
+
+
+Complexity
+Metric	Complexity
+Time	O(log n)
+Space	O(1)
