@@ -1,0 +1,66 @@
+Intuition
+We need to identify the first character that occurs only once in the string.
+So we can:
+Count how many times each character appears.
+Then scan the string again — the first char with count = 1 is our answer.
+
+
+
+Approach – Using Frequency Array / Hash Map
+Create an array of size 26 for lowercase letters (since s only contains 'a'–'z').
+Traverse s once to fill the frequency count.
+Traverse again and return the first index with count == 1.
+If none found, return -1.
+
+
+code:
+class Solution {
+public:
+    int firstUniqChar(string s) {
+        vector<int> freq(26,0);
+        for(char c:s){
+            freq[c-'a']++;
+        }
+
+        for(int i=0;i<s.size();i++){
+            if(freq[s[i]-'a']==1){
+                return i;
+            }
+        }
+        return -1;
+    }
+};
+
+
+
+
+
+Dry Run Example
+Input: "loveleetcode"
+Char	Count
+l	2
+o	2
+v	1
+e	4
+t	1
+c	1
+d	1
+
+Now, scanning left to right:
+
+'l' → count = 2
+
+'o' → count = 2
+
+'v' → count = 1 index = 2
+
+Output → 2
+
+
+
+
+
+Complexity Analysis
+Metric	Complexity
+Time	O(n) — two passes through string
+Space	O(1) — 26-size frequency array
